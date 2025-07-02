@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MadLib Stories</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Pick a story (1-10)</h1>
+    <input type="number" id="story-choice" min="1" max="10" placeholder="Enter story number" />
+    <button id="choose-btn">Choose Story</button>
+
+    <form id="madlib-form" style="display:none;">
+      <div id="inputs-container"></div>
+      <button type="submit">Generate Story</button>
+    </form>
+
+    <div id="story-result"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
