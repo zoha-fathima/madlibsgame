@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎭 Wacky Madlib Adventures</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .title {
+            font-size: 2.5rem;
+            color: #4a5568;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #718096;
+            margin-bottom: 30px;
+        }
+
+        .story-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .story-card {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            color: #4a5568;
+            padding: 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .story-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .story-card:nth-child(2n) {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+
+        .story-card:nth-child(3n) {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        }
+
+        .story-card:nth-child(4n) {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+        }
+
+        .story-card:nth-child(5n) {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+
+        .input-section {
+            display: none;
+            margin-top: 30px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 1.1rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            background: white;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #ff6b6b;
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
+        }
+
+        .story-display {
+            display: none;
+            margin-top: 30px;
+            padding: 30px;
+            background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+            border-radius: 15px;
+            border-left: 5px solid #ff6b6b;
+        }
+
+        .story-title {
+            font-size: 1.8rem;
+            color: #4a5568;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .story-content {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #2d3748;
+            text-align: left;
+            white-space: pre-line;
+        }
+
+        .loading {
+            display: none;
+            margin: 20px 0;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .story-card.selected {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .story-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">🎭 Wacky Madlib Adventures</h1>
+        <p class="subtitle">Fill in the blanks to create hilarious stories!</p>
+        
+        <!-- Story Selection -->
+        <div id="storySelection" class="fade-in">
+            <h2 style="margin-bottom: 20px; color: #4a5568;">📚 Choose Your Adventure:</h2>
+            <div class="story-grid">
+                <button class="story-card" onclick="selectStory(1)">1. 🌙 The Midnight Mystery</button>
+                <button class="story-card" onclick="selectStory(2)">2. 🤖 The Tech Terror</button>
+                <button class="story-card" onclick="selectStory(3)">3. 🚪 The Disappearing Act</button>
+                <button class="story-card" onclick="selectStory(4)">4. 🌿 The Talking Plants</button>
+                <button class="story-card" onclick="selectStory(5)">5. 🚇 The Elevator Quiz</button>
+                <button class="story-card" onclick="selectStory(6)">6. ❄️ The Cold Case</button>
+                <button class="story-card" onclick="selectStory(7)">7. 🔒 The Locked Room</button>
+                <button class="story-card" onclick="selectStory(8)">8. 👻 The Friendly Ghost</button>
+                <button class="story-card" onclick="selectStory(9)">9. 🕵️ The Secret Agent</button>
+                <button class="story-card" onclick="selectStory(10)">10. ⏰ The Time Traveling Object</button>
+            </div>
+        </div>
+
+        <!-- Input Section -->
+        <div id="inputSection" class="input-section">
+            <h2 id="storyTitle" style="margin-bottom: 20px; color: #4a5568;"></h2>
+            <div id="inputFields"></div>
+            <button class="btn" onclick="generateStory()">🎬 Create My Story!</button>
+        </div>
+
+        <!-- Loading -->
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p style="margin-top: 10px; color: #4a5568;">🎬 Creating your story...</p>
+        </div>
+
+        <!-- Story Display -->
+        <div id="storyDisplay" class="story-display">
+            <h2 id="displayTitle" class="story-title"></h2>
+            <div id="storyContent" class="story-content"></div>
+            <button class="btn" onclick="playAgain()">🎮 Play Another Story</button>
+        </div>
+    </div>
+
+    <script>
+        const stories = {
+            1: {
+                title: "🌙 The Midnight Mystery",
+                description: "Get ready for a spooky adventure...",
+                inputs: [
+                    "Name a spooky place where you'd NOT want to be at midnight",
+                    "Give me a weird object you'd find in a wizard's pocket",
+                    "Name an everyday object that might suddenly become scary",
+                    "What's a silly food that could talk to you"
+                ],
+                template: `🌙 THE MIDNIGHT MYSTERY 🌙
+
+You sneaked into the {0} at midnight to grab a {1}, but the {2} slammed shut behind you.
+Suddenly, the {3} whispered, "You shouldn't have taken my last slice."
+Moral: Never steal {3} after dark.`
+            },
+            2: {
+                title: "🤖 The Tech Terror",
+                description: "Prepare for a technological nightmare...",
+                inputs: [
+                    "Give me an action you do when you're REALLY scared",
+                    "Name an everyday object that might suddenly become scary",
+                    "Name a strange machine you'd see in a sci-fi movie",
+                    "Name a mischievous animal that might cause trouble",
+                    "Give me a weird job title (real or fake)",
+                    "Give me any object"
+                ],
+                template: `🤖 THE TECH TERROR 🤖
+
+Every time you tried to {0} at your {1}, the {2} spit out pictures of a {3} dressed as a {4}.
+Turns out, the {1} just wanted you to solve the mystery of the missing {5}.
+Moral: Sometimes technology just wants attention.`
+            },
+            3: {
+                title: "🚪 The Disappearing Act",
+                description: "Things are vanishing into thin air...",
+                inputs: [
+                    "Name a group of things that could mysteriously disappear",
+                    "Another set of weird things that might leave a trail",
+                    "Name a creepy household item that might hide secrets",
+                    "Invent a funny or spooky creature"
+                ],
+                template: `🚪 THE DISAPPEARING ACT 🚪
+
+Your {0} started disappearing one by one....
+One night, you followed a trail of {1} fluff into a secret portal behind the {2}.
+Inside, {3} were having a party.
+Moral: Always check your {2} for weird portals.`
+            },
+            4: {
+                title: "🌿 The Talking Plants",
+                description: "Your garden has a lot to say...",
+                inputs: [
+                    "Name a plant that might have a sassy personality",
+                    "Another plant that's probably jealous"
+                ],
+                template: `🌿 THE TALKING PLANTS 🌿
+
+You watered your {0}, and it suddenly said, "Stop staring at me like that."
+It warned you that the {1} next door was plotting revenge.
+Moral: Be nice to plants — you never know who's listening.`
+            },
+            5: {
+                title: "🚇 The Elevator Quiz",
+                description: "This elevator has a mind of its own...",
+                inputs: [
+                    "Name a weird mode of transport you'd never want to take",
+                    "Name a place you want to get to",
+                    "Name multiple places inside a building (floors, rooms, etc.)",
+                    "Give me a noun (something tricky or mysterious)"
+                ],
+                template: `🚇 THE ELEVATOR QUIZ 🚇
+
+You got in the {0} and pressed the button for your {1}, but the {0} stopped between {2} and the lights flickered.
+A robotic voice said, "Answer me this {3} or stay here forever."
+Moral: Always be ready for unexpected quizzes.`
+            },
+            6: {
+                title: "❄️ The Cold Case",
+                description: "Something's missing in the cold...",
+                inputs: [
+                    "Name an object that could go missing mysteriously",
+                    "Name a cold place where things might hide"
+                ],
+                template: `❄️ THE COLD CASE ❄️
+
+The {0} vanished, and you found a note saying, "Catch me if you can."
+After hours of searching, you discovered the {0} had been hiding in the {1}.
+Moral: Sometimes the answer is colder than you think.`
+            },
+            7: {
+                title: "🔒 The Locked Room",
+                description: "You're trapped, but not alone...",
+                inputs: [
+                    "Name a room where you don't go often in your house",
+                    "Name an object that could unlock secrets",
+                    "Name a set of objects that would make great prank tools"
+                ],
+                template: `🔒 THE LOCKED ROOM 🔒
+
+You left your {0}, and the door locked behind you with no {1} in sight.
+Suddenly, the door creaked open, and a tiny voice said, "Gotcha!"
+Moral: Never underestimate the cleverness of your {2}.`
+            },
+            8: {
+                title: "👻 The Friendly Ghost",
+                description: "This ghost just wants to share...",
+                inputs: [
+                    "Name a place where ghosts might hang out",
+                    "Name a favorite food to share",
+                    "Name the weirdest pizza topping you can think of"
+                ],
+                template: `👻 THE FRIENDLY GHOST 👻
+
+A ghost haunted your {0} every night, but only to steal your {1} slices.
+When you offered him a slice, he said, "Thanks, I'm just here for the {2}."
+Moral: Sharing is caring, even with ghosts.`
+            },
+            9: {
+                title: "🕵️ The Secret Agent",
+                description: "Your pet has a secret identity...",
+                inputs: [
+                    "Name a sneaky animal",
+                    "Give me an adjective that sounds suspicious",
+                    "Name a sneaky action"
+                ],
+                template: `🕵️ THE SECRET AGENT 🕵️
+
+Your {0} started following you everywhere, but then it blinked and said, "I'm actually an {1} spy."
+Moral: Don't trust the ones who {2} the loudest.`
+            },
+            10: {
+                title: "⏰ The Time Traveling Object",
+                description: "Your object knows the future...",
+                inputs: [
+                    "Name an object that can ring",
+                    "Name a verb describing what you do before bed",
+                    "Name an embarrassing thing"
+                ],
+                template: `⏰ THE TIME TRAVELING OBJECT ⏰
+
+Your {0} started ringing before you even went to {1}.
+Turns out, it was trying to warn you about tomorrow's embarrassing {2}.
+Moral: Sometimes, the future knocks earlier than expected.`
+            }
+        };
+
+        let currentStory = null;
+        let userInputs = [];
+
+        function selectStory(storyNumber) {
+            currentStory = storyNumber;
+            const story = stories[storyNumber];
+            
+            // Update UI
+            document.getElementById('storySelection').style.display = 'none';
+            document.getElementById('inputSection').style.display = 'block';
+            document.getElementById('storyTitle').textContent = story.title;
+            
+            // Create input fields
+            const inputFields = document.getElementById('inputFields');
+            inputFields.innerHTML = '';
+            
+            story.inputs.forEach((prompt, index) => {
+                const inputGroup = document.createElement('div');
+                inputGroup.className = 'input-group';
+                inputGroup.innerHTML = `
+                    <label for="input${index}"> ${prompt}:</label>
+                    <input type="text" id="input${index}" placeholder="Enter your answer...">
+                `;
+                inputFields.appendChild(inputGroup);
+            });
+        }
+
+        function generateStory() {
+            // Collect inputs
+            userInputs = [];
+            const inputs = document.querySelectorAll('#inputSection input');
+            
+            for (let input of inputs) {
+                if (!input.value.trim()) {
+                    alert('❌ Please fill in all the blanks!');
+                    return;
+                }
+                userInputs.push(input.value.trim());
+            }
+            
+            // Show loading
+            document.getElementById('inputSection').style.display = 'none';
+            document.getElementById('loading').style.display = 'block';
+            
+            // Simulate loading time
+            setTimeout(() => {
+                displayStory();
+            }, 1500);
+        }
+
+        function displayStory() {
+            const story = stories[currentStory];
+            let storyText = story.template;
+            
+            // Replace placeholders with user inputs
+            userInputs.forEach((input, index) => {
+                // Use global replacement to replace ALL instances of the placeholder
+                const regex = new RegExp(`\\{${index}\\}`, 'g');
+                storyText = storyText.replace(regex, input);
+            });
+            
+            // Update display
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('storyDisplay').style.display = 'block';
+            document.getElementById('displayTitle').textContent = story.title;
+            document.getElementById('storyContent').textContent = storyText;
+        }
+
+        function playAgain() {
+            document.getElementById('storyDisplay').style.display = 'none';
+            document.getElementById('storySelection').style.display = 'block';
+            currentStory = null;
+            userInputs = [];
+        }
+
+        function backToSelection() {
+            document.getElementById('inputSection').style.display = 'none';
+            document.getElementById('storyDisplay').style.display = 'none';
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('storySelection').style.display = 'block';
+            currentStory = null;
+            userInputs = [];
+        }
+
+        // Add hover effects to story cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.story-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.classList.add('selected');
+                });
+                card.addEventListener('mouseleave', function() {
+                    this.classList.remove('selected');
+                });
+            });
+        });
+    </script>
+</body>
+</html> 
